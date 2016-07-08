@@ -37,7 +37,6 @@ namespace shm{
   const T* Shm<KEY, T>::getElement(){
     
     std::lock_guard<std::mutex> lock(shm_mutex);
-
     T *ptr = new T;
     T *tmp = (new(shm_) T);
     std::copy(tmp, tmp + sizeof(T), ptr);
