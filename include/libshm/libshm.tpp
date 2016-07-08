@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string.h>
 
-#include <libshm.hpp>
+#include <thread>
 
 namespace shm{
   template <key_t KEY, typename T> 
@@ -24,14 +24,20 @@ namespace shm{
 
   template <key_t KEY, typename T>
   void Shm<KEY, T>::setElement(const T *data){
-    memcpy(shm_, data, sizeof(T));
+    
+    std::lock_guard<std::mutex> lock(shm_mutex);
+    memcpy(shm_,data,sizeof(T));
+
   }
 
   template <key_t KEY, typename T>
   const T* Shm<KEY, T>::getElement(){
-    T* tmp_ptr = new(shm_) T;
-    T* ptr = new T;
-    memcpy(ptr, tmp_ptr, sizeof(T));
+    
+    std::lock_guard<std::mutex> lock(shm_mutex);
+    T *ptr = new T;
+    T *tmp = (new(shm_) T);
+    memcpy(ptr,tmp,sizeof(T));
+
     return ptr;
   }
 

@@ -1,6 +1,9 @@
 #pragma once
 
-#include <stdio.h>
+#include <mutex>
+using std::mutex;
+#include <cstdio>
+
 #include <sys/ipc.h>
 #include <sys/types.h>
 #include <sys/shm.h>
@@ -47,6 +50,9 @@ namespace shm{
   private:
     void* shm_;
     static int shmid_;
+    mutex shm_mutex;
   };
 
 }
+
+#include "libshm.tpp"
