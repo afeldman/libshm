@@ -48,37 +48,7 @@ def configure(conf):
 
     
 def build(bld):
-
-    from waflib import Options
  
-    # libshm compile
-    libshm =bld(features     = ['cxx'],
-	        source       = 'src/libshm.cc',
-	        cxxflags     = ['-Wall','-std=c++11'],
-                includes     = ['include/libshm'],
-                install_path = '${PREFIX}/lib',
-	        target       = name)
-        
-    if Options.options.clang:
-         libshm.cxxflags.append('-stdlib=libstdc++')
-        
-    libshm.features.append('cxxshlib' if Options.options.shared else 'cxxstlib')
-        
-    # flogger headerfile install
+    # libshm headerfile install
     bld.install_files('${PREFIX}/include/libshm/', bld.path.ant_glob(['include/libshm/*.hpp'], remove=False))
-
-# process libshm.pc.in -> libshm.pc - by default it use the task "env" attribute
-    pcf = bld(
-        features = 'subst',
-        source = '%s.pc.in' % name,
-        target = '%s.pc' % name,
-        install_path = '${PREFIX}/lib/pkgconfig/'
-        )
-
-    pcf.env.table.update(
-        {'LIBS':' -l%s'  % 'libshm', 
-         'VERSION': version,
-         'NAME': name,
-         'PREFIX': '%s' % Options.options.prefix,
-         'INCLUDEDIR': 'include/%s' % name}
-        )
+    bld.install_files('${PREFIX}/include/libshm/', bld.path.ant_glob(['include/libshm/*.tpp'], remove=False))

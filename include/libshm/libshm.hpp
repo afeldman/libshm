@@ -54,3 +54,5 @@ namespace shm{
   };
 
 }
+
+#include "libshm.tpp"
