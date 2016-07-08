@@ -29,7 +29,9 @@ namespace shm{
 
   template <key_t KEY, typename T>
   const T* Shm<KEY, T>::getElement(){
-    T* ptr = new(shm_) T;
+    T* tmp_ptr = new(shm_) T;
+    T* ptr = new T;
+    memcpy(ptr, tmp_ptr, sizeof(T));
     return ptr;
   }
 
