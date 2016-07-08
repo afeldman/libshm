@@ -7,10 +7,18 @@
 
 namespace shm{
 
-  template <key_t KEY, typename T, int ELEMENTS_COUNT = 1>
+  template <key_t KEY, typename T>
   class Shm {
   private:
-    static void get();
+    static void get(){
+      if(shmid_ == -1){
+        if( (shmid_ = shmget(KEY, sizeof(T), 0666)) < 0 ){
+          perror("shmget");
+          throw std::runtime_error("Shared memory can not be created");
+        }
+      }
+    }
+
     void attach();
     
   public:
@@ -19,8 +27,23 @@ namespace shm{
 
     void setElement(const T*);
     const T* getElement();
-    static void create();
-    static void destroy();
+
+    static void create(){
+    if ((shmid_ = shmget(KEY, sizeof(T), IPC_CREAT | 0666)) < 0) 
+      {
+        throw std::runtime_error("Failed create shared memory");
+      }
+    }
+    
+    static void destroy(){
+      get();
+      if(shmctl(shmid_, IPC_RMID, nullptr) < 0){
+        perror("shmctl");
+        throw std::runtime_error("Failed remove shared memory shm");
+      }
+      shmid_ = -1;
+    }
+    
   private:
     void* shm_;
     static int shmid_;
