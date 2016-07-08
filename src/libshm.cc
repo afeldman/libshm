@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string.h>
 
+#include <algorithm>
 #include <thread>
 
 #include <libshm.hpp>
@@ -28,8 +29,8 @@ namespace shm{
   void Shm<KEY, T>::setElement(const T *data){
     
     std::lock_guard<std::mutex> lock(shm_mutex);
-    
-    memcpy(shm_, data, sizeof(T));
+    std::copy(data, data+sizeof(T),shm_);
+
   }
 
   template <key_t KEY, typename T>
@@ -37,9 +38,9 @@ namespace shm{
     
     std::lock_guard<std::mutex> lock(shm_mutex);
 
-    T* ptr = new T;
-
-    memcpy(ptr, (new(shm_) T), sizeof(T));
+    T *ptr = new T;
+    T *tmp = (new(shm_) T);
+    std::copy(tmp, tmp + sizeof(T), ptr);
 
     return ptr;
   }
