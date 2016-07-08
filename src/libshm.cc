@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string.h>
 
+#include <thread>
+
 #include <libshm.hpp>
 
 namespace shm{
@@ -24,14 +26,22 @@ namespace shm{
 
   template <key_t KEY, typename T>
   void Shm<KEY, T>::setElement(const T *data){
+    
+    std::lock_guard<std::mutex> lock(shm_mutex);
+    
     memcpy(shm_, data, sizeof(T));
   }
 
   template <key_t KEY, typename T>
   const T* Shm<KEY, T>::getElement(){
+    
+    std::lock_guard<std::mutex> lock(shm_mutex);
+    
     T* tmp_ptr = new(shm_) T;
     T* ptr = new T;
+
     memcpy(ptr, tmp_ptr, sizeof(T));
+
     return ptr;
   }
 
