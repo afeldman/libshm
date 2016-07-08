@@ -53,16 +53,14 @@ def build(bld):
  
     # libshm compile
     libshm =bld(features     = ['cxx'],
-	        source       = 'src/.cc',
-	        cxxflags     = ['-Wall','-stdlib=libstdc++'],
-                includes     = ['include/'],
+	        source       = 'src/libshm.cc',
+	        cxxflags     = ['-Wall','-std=c++11'],
+                includes     = ['include/libshm'],
                 install_path = '${PREFIX}/lib',
 	        target       = name)
         
-    if not Options.options.clang:
-        libshm.cxxflags.append('-std=c++11')
-    else:
-        libshm.cxxflags.append('-stdlib=libstdc++')
+    if Options.options.clang:
+         libshm.cxxflags.append('-stdlib=libstdc++')
         
     libshm.features.append('cxxshlib' if Options.options.shared else 'cxxstlib')
         
