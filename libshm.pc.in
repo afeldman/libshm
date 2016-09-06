@@ -1,0 +1,10 @@
+prefix=@PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/
+includedir=${prefix}/@INCLUDEDIR@
+
+Name: @NAME@
+Description: LibSHM gives lokal shared memory for linux to do ipc
+Version: @VERSION@
+Libs: -L${libdir} @LIBS@
+Cflags: -I${includedir}
