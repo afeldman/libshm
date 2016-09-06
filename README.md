@@ -1,6 +1,6 @@
 # libshm
 
-This projects make an easy C++11 access to a shared memory. The Shared Memeory is part of the Linux kernal system and the used device could be found under /dev/shm .
+This projects make an easy C++11 access to a shared memory. The Shared Memeory is part of the Linux kernal system and the used device could be found under /dev/shm.
 This example shows how to use the project:
 ```cpp
     #include <iostream>
@@ -30,6 +30,7 @@ This example shows how to use the project:
     return 0;
     }
 ```
+
 #install libshm
 
-this project is build using WAF
+this project is build using [WAF](https://github.com/waf-project/waf). To Compile ind install the project use the waf progamm included in the project. The standard installation directory ist /usr/local/include.
